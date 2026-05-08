@@ -1,23 +1,23 @@
-# Интеграция CryoGrid.jl: 2D трансекта Маккензи
 
-## Выполненные задачи
-Новый скрипт `mackenzie_cryogrid.jl`, который реализует архитектуру объединения **ансамбля одномерных физических моделей** `CryoGrid.jl` в единый двумерный профиль (трансекту).
+# CryoGrid.jl Integration: 2D Mackenzie Transect
 
-В скрипте реализовано:
-1. Генерация сетки для $X$ (расстояние от берега) и грубой сетки по глубине (от 0 до 1000 м) для ускорения вычислений.
-2. Функция `run_1d_profile(x)`, которая настраивает и решает задачу `CryoGridProblem` (`SoilHeatTile`) с использованием пакета `OrdinaryDiffEq`.
-3. Сборка результатов и интерполяция с помощью пакета `Interpolations.jl` для перевода "грубых" физических точек на гладкую сетку для построения контуров.
-4. Отрисовка результатов в стиле, аналогичном оригинальной статье (с помощью `Plots.jl`), сохраняющая прерывистую нулевую изотерму и все нужные параметры.
+## Completed Tasks
+The new script `mackenzie_cryogrid.jl` implements an architecture that combines an **ensemble of 1D physical models** from `CryoGrid.jl` into a single 2D profile (transect).
+
+The script features:
+1. Generation of an $X$ grid (distance from shoreline) and a coarse depth grid (from 0 to 1000 m) to speed up computations.
+2. A `run_1d_profile(x)` function that configures and solves a `CryoGridProblem` (`SoilHeatTile`) using the `OrdinaryDiffEq` package.
+3. Aggregation of results and interpolation using the `Interpolations.jl` package to transform "coarse" physical data points onto a smooth grid for contour plotting.
+4. Visualization of the results in a style analogous to the original paper (using `Plots.jl`), preserving the dashed zero isotherm and all necessary parameters.
 
 > [!NOTE]
-> Скрипт является **"умным"**. Он автоматически попытается использовать пакет `CryoGrid.jl`, если он у вас установлен. В случае, если `CryoGrid` отсутствует или не может быть загружен (что часто бывает из-за сложного окружения и обновлений), скрипт сработает с использованием резервного математического генератора для демонстрации интерполяции и отрисовки графиков.
+> The script is **"smart"**. It will automatically try to use the `CryoGrid.jl` package if it is installed on your system. If `CryoGrid` is missing or fails to load (which often happens due to complex environments and updates), the script will seamlessly fall back to using a mathematical data generator to demonstrate the interpolation and plot rendering.
 
-## Результат запуска
-Запуск скрипта генерирует файл `mackenzie_cryogrid_output.png`. 
+## Execution Result
+Running the script generates the `mackenzie_cryogrid_output.png` file.
 
-
-## Как развивать модель дальше
-Для запуска полного научного моделирования (подобного Overduin 2019) вам потребуется:
-1. Заменить профиль грунта (`SamoylovDefault`) на вашу собственную стратиграфию шельфа Маккензи (разные стратиграфические слои с различными физическими свойствами).
-2. Задать `TemperatureBC` не как константу, а как функцию от времени (внешний форсинг палеоклимата).
-3. Интегрировать `CryoGrid` с параллельными вычислениями (например, `Distributed` или `EnsembleProblem` в SciML), так как расчет 200 профилей по 1000 м на 100 000 лет займет много вычислительного времени.
+## How to Develop the Model Further
+To run a full scientific simulation (similar to Overduin 2019), you will need to:
+1. Replace the default soil profile (`SamoylovDefault`) with your own stratigraphy for the Mackenzie shelf (different stratigraphic layers with distinct physical properties).
+2. Set `TemperatureBC` not as a constant, but as a function of time (external paleoclimate forcing).
+3. Integrate `CryoGrid` with parallel computing (e.g., `Distributed` or `EnsembleProblem` in SciML), as computing 200 profiles down to 1000 m over 100,000 years will require substantial computational time.
